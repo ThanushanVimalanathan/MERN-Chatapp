@@ -4,6 +4,8 @@ import cors from "cors";
 import http from "http";
 import { connectDB } from "./lib/db.js";
 import userRouter from "./routes/userRoutes.js";
+import messageRouter from "./routes/messageRoutes.js";
+import { Server } from "socket.io";
 
 
 //Create Express app and HTTP
@@ -12,6 +14,31 @@ const app = express();
 const server = http.createServer(app);
 
 
+//Initialize Socket.io
+export const io = new Server(server, {
+    cors: {origin: "*"}
+})
+
+// store online users
+export const userSocketMap = {}; //{userId: socketId}
+
+//Socket.io connection handler
+io.on("connection",(socket) => {
+    const userId = socket.handshake.query.userId;
+    console.log("User connected ", userId);
+
+    if(userId) userSocketMap[userId] = socket.id;
+
+    //Emit online users to all connected clients
+    io.emit("get-online-users", Object.keys(userSocketMap));
+
+    socket.on("disconnect", ()=>{
+        console.log("User disconnected ", userId);
+        if(userId) delete userSocketMap[userId];
+        io.emit("get-online-users", Object.keys(userSocketMap));
+    });
+});
+
 //Middleware setup
 app.use(express.json({limit:"4mb"}));
 app.use(cors());
@@ -19,6 +46,7 @@ app.use(cors());
 //Routes setup
 app.use("/api/status", (req, res)=> res.send("Server is running"));
 app.use("/api/auth",userRouter);
+app.use("/api/messages", messageRouter);
 
 
 //connect to database
