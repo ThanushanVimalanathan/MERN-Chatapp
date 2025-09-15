@@ -12,6 +12,7 @@ export const signup = async(req,res)=>{
         if (!fullName || !email || !password || !bio) {
             return res.json({success:false, message:"Missing Details"});
         }
+
         const user = await User.findOne({email});
         if (user) {
             return res.json({success:false, message:"User already exists"});
