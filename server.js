@@ -23,19 +23,19 @@ export const io = new Server(server, {
 export const userSocketMap = {}; //{userId: socketId}
 
 //Socket.io connection handler
-io.on("connection",(socket) => {
+io.on("connection",(socket)=> {
     const userId = socket.handshake.query.userId;
     console.log("User connected ", userId);
 
     if(userId) userSocketMap[userId] = socket.id;
 
     //Emit online users to all connected clients
-    io.emit("get-online-users", Object.keys(userSocketMap));
+    io.emit("getOnlineUsers", Object.keys(userSocketMap));
 
     socket.on("disconnect", ()=>{
         console.log("User disconnected ", userId);
-        if(userId) delete userSocketMap[userId];
-        io.emit("get-online-users", Object.keys(userSocketMap));
+        delete userSocketMap[userId];
+        io.emit("getOnlineUsers", Object.keys(userSocketMap));
     });
 });
 
