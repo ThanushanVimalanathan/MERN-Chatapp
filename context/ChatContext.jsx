@@ -1,17 +1,17 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { AuthContext } from "./AuthContext.jsx";
+import { AuthContext } from "./AuthContext";
 import toast from "react-hot-toast";
 
 export const ChatContext = createContext();
 
-export const ChatProvider = ({ children }) => {
+export const ChatProvider = ({ children })=>{
 
     const [messages, setMessages] = useState([]);
     const [users, setUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
     const [unseenMessages, setUnseenMessages] = useState({});
 
-    const {socket, axios} = useContext(AuthContext);
+    const {socket, axios} = useContext(AuthContext)
 
     // function to get all users from sidebar
 
@@ -75,7 +75,7 @@ export const ChatProvider = ({ children }) => {
         }
 
         // function to unsubscribe from messages
-        const unsubscribeFromMessages = () =>{
+        const unsubscribeFromMessages = ()=>{
             if(socket) socket.off("newMessage");
         }
 
@@ -90,11 +90,11 @@ export const ChatProvider = ({ children }) => {
         users,
         selectedUser,
         getUsers,
-        setMessages,
+        getMessages,
         sendMessage,
         setSelectedUser,
         unseenMessages,
-        setUnseenMessages,
+        setUnseenMessages
     }
 
     return(

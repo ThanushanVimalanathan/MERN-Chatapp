@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import assets from '../assets/assets'
+import assets from '../assets/assets.js'
 import { AuthContext } from '../../context/AuthContext.jsx'
 
 const Profilepage = () => {
@@ -63,4 +63,4 @@ const Profilepage = () => {
   )
 }
 
-export default Profilepage
+export default Profilepage;

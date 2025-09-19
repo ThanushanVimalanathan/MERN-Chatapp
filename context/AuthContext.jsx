@@ -9,7 +9,7 @@ axios.defaults.baseURL = backendUrl;
 
 export const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
+export const AuthProvider = ({ children })=> {
 
     const [token, setToken] = useState(localStorage.getItem("token"));
     const [authUser, setAuthUser] = useState(null);
@@ -35,12 +35,13 @@ export const AuthProvider = ({ children }) => {
         try {
             const {data} = await axios.post(`/api/auth/${state}`,credentials);
             if(data.success){
-                setAuthUser(data.userData)
+                setAuthUser(data.userData);
                 connectSocket(data.userData);
-                axios.defaults.headers.common["token"] = data.token
+                axios.defaults.headers.common["token"] = data.token;
                 setToken(data.token);
-                localStorage.setItem("token",data.token)
-                toast.success(data.message)
+                localStorage.setItem("token",data.token);
+                toast.success(data.message);
+
             }else{
                 toast.error(data.message);
             }
@@ -63,7 +64,7 @@ export const AuthProvider = ({ children }) => {
 
     // Update profile function to handle user profile updates 
 
-    const updateProfile = async (body) => {
+    const updateProfile = async (body)=> {
         try {
             const {data} = await axios.put("/api/auth/update-profile",body);
             if(data.success){
@@ -78,11 +79,13 @@ export const AuthProvider = ({ children }) => {
 
     // Connect socket function to handle socket connection and online users updates
 
-    const connectSocket = (userData) => {
+    const connectSocket = (userData)=>{
         if(!userData || socket?.connected) return;
         const newSocket = io(backendUrl,{
             query:{
-                userId: userData._id,
+
+                userId:userData._id,
+
             }
         });
         newSocket.connect();
@@ -103,8 +106,8 @@ export const AuthProvider = ({ children }) => {
     const value = {
         axios,
         authUser,
-        onlineUsers,
         socket,
+        onlineUsers,
         login,
         logout,
         updateProfile,
