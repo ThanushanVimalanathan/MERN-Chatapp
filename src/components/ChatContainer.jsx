@@ -10,7 +10,6 @@ const ChatContainer = () => {
   const { messages,selectedUser,setSelectedUser,sendMessage,getMessages}= useContext(ChatContext)
   const {authUser,onlineUsers}= useContext(AuthContext)
 
-
   const scrollEnd = useRef()
 
   const [input , setInput] = useState('');
@@ -31,7 +30,6 @@ const ChatContainer = () => {
       return;
     } 
     const reader = new FileReader();
-
     reader.onloadend = async ()=>{
       await sendMessage({image:reader.result})
       e.target.value = "";
