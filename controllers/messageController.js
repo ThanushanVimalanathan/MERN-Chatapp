@@ -38,7 +38,7 @@ export const getMessages = async (req,res)=>{
         const messages = await Message.find({
             $or:[
                 {senderId:myId, receiverId:selectedUserId},
-                {senderId:selectedUserId, receiverId:myId}
+                {senderId:selectedUserId, receiverId:myId},
             ]
         })
 
@@ -89,7 +89,7 @@ export const getMessages = async (req,res)=>{
             //emit the new message to receiver's socket
             const receiverSocketId = userSocketMap[receiverId];
             if(receiverSocketId){
-                io.to(receiverSocketId).emit("new-message", newMessage);
+                io.to(receiverSocketId).emit("newMessage", newMessage);
             }
 
             res.json({success:true, newMessage });
